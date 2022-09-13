@@ -12,6 +12,10 @@ class App(tk.Tk):
         self.pshell_check = tk.IntVar()
         self.thick_including = tk.Checkbutton(text='Take into account PSHELL thickness?', variable=self.pshell_check)
         self.thick_including.pack(padx=60, pady=10)
+        self.chaos_check = tk.IntVar()
+        self.thick_including = tk.Checkbutton(text='Dat/bdf file is sorted (grid/cbar/shell elm/proper)?',
+                                              variable=self.chaos_check)
+        self.thick_including.pack(padx=60, pady=10)
         self.btn_file = tk.Button(self, text="Choose file",
                              command=self.choose_file)
         self.btn_file.pack(padx=60, pady=10)
@@ -19,10 +23,10 @@ class App(tk.Tk):
         self.btn_start.pack(padx=60, pady=10)
 
     def choose_file(self):
-        filetypes = (("bulk файл", "*.dat *.bdf *.blk"),
-                     ("Текстовый файл", "*.txt"),
-                     ("Любой", "*"))
-        filename = fd.askopenfilename(title="Choose fule", initialdir="/",
+        filetypes = (("bulk file", "*.dat *.bdf *.blk"),
+                     ("txt file", "*.txt"),
+                     ("Any file", "*"))
+        filename = fd.askopenfilename(title="Choose file", initialdir="/",
                                       filetypes=filetypes)
         if filename: self.filename = filename
 
@@ -30,9 +34,9 @@ class App(tk.Tk):
         if self.message_entry.get() and self.filename:
             index = self.filename.find('.')
             new_file_name = self.filename[:index] + self.message_entry.get() + self.filename[index:]
-            print(self.filename, new_file_name, self.pshell_check.get())
-            cbeam_create.nc_generate(self.filename, new_file_name, self.pshell_check.get())
-        else: mb.showwarning('Warning', 'Не выбран файл или не указан индекс нового файла')
+            # print(self.filename, new_file_name, self.pshell_check.get())
+            cbeam_create.nc_generate(self.filename, new_file_name, self.pshell_check.get(), self.chaos_check.get())
+        else: mb.showwarning('Warning', 'No file selected or new file index empty')
 
 
 if __name__ == "__main__":
